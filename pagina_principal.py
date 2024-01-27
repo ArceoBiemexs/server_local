@@ -13,7 +13,7 @@ data = pd.DataFrame({
 # Aplicación Streamlit con mejoras visuales
 def main():
     st.title("Punto de Venta - Carnitas de Cerdo")
-    st.image("tu_logo.png", width=200)  # Añade tu logo
+    #st.image("tu_logo.png", width=200)  # Añade tu logo
 
     # Colores personalizados
     st.markdown(
