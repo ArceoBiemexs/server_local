@@ -1,37 +1,35 @@
 import streamlit as st
 import pandas as pd
 
-# Datos simulados de vlogs de BMX
+# Datos simulados de ventas de carnitas
 data = pd.DataFrame({
     'Fecha': ['2024-01-01', '2024-01-02', '2024-01-03'],
-    'Titulo': ['Vlog de BMX #1', 'Vlog de BMX #2', 'Vlog de BMX #3'],
-    'Descripcion': [
-        'Recorriendo nuevos lugares para practicar BMX.',
-        'Trucos y acrobacias en el parque de skate.',
-        'Entrevista con un profesional de BMX.'
-    ],
-    'Video_URL': [
-        'https://www.youtube.com/watch?v=video1',
-        'https://www.youtube.com/watch?v=video2',
-        'https://www.youtube.com/watch?v=video3'
-    ]
+    'Producto': ['Carnitas de cerdo', 'Tacos de carnitas', 'Orden de carnitas'],
+    'Cantidad': [20, 35, 15],
+    'Precio_Unitario': [10.50, 2.50, 8.00],
+    'Total': [210.00, 87.50, 120.00]
 })
 
 # Aplicación Streamlit
 def main():
-    st.title("Vlog de BMX")
+    st.title("Punto de Venta - Carnitas de Cerdo")
 
-    # Mostrar la tabla de vlogs
-    st.table(data[['Fecha', 'Titulo', 'Descripcion']])
+    # Mostrar la tabla de ventas
+    st.table(data[['Fecha', 'Producto', 'Cantidad', 'Precio_Unitario', 'Total']])
 
-    # Seleccionar un vlog para ver el video
-    selected_vlog = st.selectbox("Selecciona un vlog para ver el video:", data['Titulo'])
+    # Resumen de ventas
+    total_ventas = data['Total'].sum()
+    st.write(f"**Total de Ventas:** ${total_ventas:.2f}")
 
-    # Obtener la URL del video seleccionado
-    video_url = data[data['Titulo'] == selected_vlog]['Video_URL'].iloc[0]
+    # Seleccionar un producto para ver detalles
+    selected_producto = st.selectbox("Selecciona un producto para ver detalles:", data['Producto'])
 
-    # Mostrar el video embebido
-    st.video(video_url)
+    # Obtener detalles del producto seleccionado
+    producto_details = data[data['Producto'] == selected_producto]
+
+    # Mostrar detalles del producto
+    st.write(f"**Detalles de {selected_producto}:**")
+    st.write(producto_details)
 
 if __name__ == "__main__":
     main()
