@@ -10,16 +10,46 @@ data = pd.DataFrame({
     'Total': [210.00, 87.50, 120.00]
 })
 
-# Aplicación Streamlit
+# Aplicación Streamlit con mejoras visuales
 def main():
     st.title("Punto de Venta - Carnitas de Cerdo")
+    st.image("tu_logo.png", width=200)  # Añade tu logo
 
-    # Mostrar la tabla de ventas
-    st.table(data[['Fecha', 'Producto', 'Cantidad', 'Precio_Unitario', 'Total']])
+    # Colores personalizados
+    st.markdown(
+        """
+        <style>
+            .big-font {
+                font-size: 24px !important;
+            }
+            .highlight {
+                background-color: #f5f5f5;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Mostrar la tabla de ventas con colores
+    st.table(data.style.applymap(lambda x: 'background-color: #aaffaa', subset=['Total']))
 
     # Resumen de ventas
     total_ventas = data['Total'].sum()
-    st.write(f"**Total de Ventas:** ${total_ventas:.2f}")
+    st.markdown(f"<p class='big-font highlight'>Total de Ventas: ${total_ventas:.2f}</p>", unsafe_allow_html=True)
 
     # Seleccionar un producto para ver detalles
     selected_producto = st.selectbox("Selecciona un producto para ver detalles:", data['Producto'])
@@ -30,6 +60,10 @@ def main():
     # Mostrar detalles del producto
     st.write(f"**Detalles de {selected_producto}:**")
     st.write(producto_details)
+
+    # Botón de recarga manual (puedes hacerlo más interactivo)
+    if st.button("Recargar página"):
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
