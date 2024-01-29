@@ -1,69 +1,112 @@
 import streamlit as st
 import pandas as pd
+import hashlib
 
-# Datos simulados de ventas de carnitas
+# Sample data for the barber shop
 data = pd.DataFrame({
-    'Fecha': ['2024-01-01', '2024-01-02', '2024-01-03'],
-    'Producto': ['Carnitas de cerdo', 'Tacos de carnitas', 'Orden de carnitas'],
-    'Cantidad': [20, 35, 15],
-    'Precio_Unitario': [10.50, 2.50, 8.00],
-    'Total': [210.00, 87.50, 120.00]
+    'Style': ['Classic Cut', 'Fade', 'Pompadour', 'Buzz Cut', 'Undercut'],
+    'Description': [
+        'Timeless and clean look suitable for any occasion.',
+        'Gradual transition from short to long, modern style.',
+        'High volume on top with shorter sides.',
+        'Short and uniform length all around.',
+        'Longer hair on top with short sides and back.'
+    ]
 })
 
-# Aplicación Streamlit con mejoras visuales
+# Sample data for user testimonials
+testimonials = pd.DataFrame({
+    'Client': ['John', 'Jane', 'Alex'],
+    'Testimonial': [
+        'Excellent service! I always leave satisfied with my haircut.',
+        'The barbers are skilled and friendly. Great atmosphere!',
+        'I love the attention to detail. Best barbershop in town!'
+    ]
+})
+
+# Sample data for barbers
+barbers = pd.DataFrame({
+    'Name': ['Barber1', 'Barber2', 'Barber3'],
+    'Bio': [
+        'With over 10 years of experience, Barber1 is dedicated to providing top-notch haircuts.',
+        'Barber2 is known for keeping up with the latest trends and delivering exceptional results.',
+        'Barber3 is passionate about creating unique styles that suit each client.'
+    ]
+})
+
+# Sample data for popular styles
+popular_styles = pd.DataFrame({
+    'Style': ['Classic Cut', 'Fade', 'Pompadour']
+})
+
+# Function to authenticate user login
+def authenticate(username, password):
+    # Add your own logic for authentication (e.g., using a database)
+    # For simplicity, using hardcoded credentials in this example
+    users = {'user1': 'pass1', 'user2': 'pass2'}
+    return users.get(username) == password
+
+# Streamlit App
 def main():
-    st.title("Punto de Venta - Carnitas de Cerdo")
-    #st.image("tu_logo.png", width=200)  # Añade tu logo
+    st.title("Barbershop Website")
 
-    # Colores personalizados
-    st.markdown(
-        """
-        <style>
-            .big-font {
-                font-size: 24px !important;
-            }
-            .highlight {
-                background-color: #f5f5f5;
-                padding: 10px;
-                border-radius: 5px;
-            }
-            .button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 5px;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    # Login section
+    st.sidebar.header("Login")
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    if st.sidebar.button("Login"):
+        if authenticate(username, password):
+            st.success(f"Welcome, {username}!")
+            show_homepage()
+        else:
+            st.error("Invalid credentials. Please try again.")
 
-    # Mostrar la tabla de ventas con colores
-    st.table(data.style.applymap(lambda x: 'background-color: #aaffaa', subset=['Total']))
+def show_homepage():
+    st.image("barbershop_logo.png", width=200)
+    st.subheader("Welcome to Our Barbershop")
 
-    # Resumen de ventas
-    total_ventas = data['Total'].sum()
-    st.markdown(f"<p class='big-font highlight'>Total de Ventas: ${total_ventas:.2f}</p>", unsafe_allow_html=True)
+    # Navigation
+    navigation = st.radio("Navigate", ["Services", "Gallery", "Barbers", "Testimonials", "Contact"])
+    
+    if navigation == "Services":
+        show_services()
+    elif navigation == "Gallery":
+        show_gallery()
+    elif navigation == "Barbers":
+        show_barbers()
+    elif navigation == "Testimonials":
+        show_testimonials()
+    elif navigation == "Contact":
+        show_contact()
 
-    # Seleccionar un producto para ver detalles
-    selected_producto = st.selectbox("Selecciona un producto para ver detalles:", data['Producto'])
+def show_services():
+    st.header("Our Services")
+    st.table(data)
 
-    # Obtener detalles del producto seleccionado
-    producto_details = data[data['Producto'] == selected_producto]
+def show_gallery():
+    st.header("Gallery")
+    st.subheader("Popular Styles")
+    st.image("classic_cut.jpg", caption="Classic Cut", width=200)
+    st.image("fade.jpg", caption="Fade", width=200)
+    st.image("pompadour.jpg", caption="Pompadour", width=200)
+    st.write("Explore more styles in our portfolio.")
 
-    # Mostrar detalles del producto
-    st.write(f"**Detalles de {selected_producto}:**")
-    st.write(producto_details)
+def show_barbers():
+    st.header("Meet Our Barbers")
+    st.table(barbers)
 
-    # Botón de recarga manual (puedes hacerlo más interactivo)
-    if st.button("Recargar página"):
-        st.experimental_rerun()
+def show_testimonials():
+    st.header("Client Testimonials")
+    st.table(testimonials)
+
+def show_contact():
+    st.header("Contact Us")
+    st.subheader("Visit Our Barbershop")
+    st.write("123 Main Street, Cityville")
+    st.subheader("Call Us")
+    st.write("+123 456 7890")
+    st.subheader("Business Hours")
+    st.write("Monday to Saturday: 9:00 AM - 7:00 PM")
 
 if __name__ == "__main__":
     main()
