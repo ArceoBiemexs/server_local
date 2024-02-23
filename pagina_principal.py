@@ -62,7 +62,7 @@ def main():
             st.error("Invalid credentials. Please try again.")
 
 def show_homepage():
-    st.image("barbershop_logo.png", width=200)
+    
     st.subheader("Welcome to Our Barbershop")
 
     # Navigation
